@@ -3,12 +3,36 @@ package main
 
 import (
 	"fmt"
-	"runtime"
 )
 
 func main() {
-	fmt.Println("Show me my OS & Architecture:",runtime.GOOS, runtime.GOARCH)
+	//lets make a channrl
+	//introducing "1" as a make param to make a buffer channel
+	ch := make(chan int, 2)
+
+
+	//when the shannel is blocked which is clear in the "fatal error: all goroutines are asleep - deadlock!" we will have to pass the value succesffully. we must use the go func() function -- the flow continues.
+	go func() {
+		ch <- 42
+		ch <- 43
+
+
+	}()
+
+	fmt.Println((<-ch))
+
 }
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+// package main
+
+// import (
+// 	"fmt"
+// 	"runtime"
+// )
+
+// func main() {
+// 	fmt.Println("Show me my OS & Architecture:",runtime.GOOS, runtime.GOARCH)
+// }
 
 
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
