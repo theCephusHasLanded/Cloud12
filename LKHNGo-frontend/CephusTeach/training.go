@@ -3,7 +3,10 @@ package main
 import (
 	"fmt"
 	"runtime"
+	"sync"
 )
+
+var wg sync.WaitGroup
 
 func main() {
 	var name string = "Cephus"
@@ -23,10 +26,12 @@ func main() {
 	isBool, energyLevel := activateGate(39)
 	fmt.Println(isBool, energyLevel)
 
+	wg.Add(1)
 	go activateGate(40)
 	go activateGate(41)
 	go activateGate(42)
 	go activateGate(43)
+	wg.Wait()
 
 
 }
@@ -44,5 +49,6 @@ func activateGate(energyLevel int) (bool, int) {
 		fmt.Println("Energylevels are not a go!")
 		return false, energyLevel
 	}
-
+wg.Wait()
+return false, energyLevel
 }
