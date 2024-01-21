@@ -4,38 +4,40 @@ import (
 	"fmt"
 	"runtime"
 	"sync"
-	"sync/atomic"
 )
 
 func main() {
-	fmt.Println("how many CPU's running?:\t", runtime.NumCPU())
-	fmt.Println("how many go Routines running?:\t", runtime.NumGoroutine())
 
-	var counter int64
+	fmt.Println("Begin CPU", runtime.NumCPU())
+	fmt.Println("Begin Routines", runtime.NumGoroutine())
 
-	const gz = 100
-	var wait sync.WaitGroup
-	wait.Add(gz)
+	var waitingGame sync.WaitGroup
+	waitingGame.Add(2)
 
-	for i := 0; i < gz; i++ {
 		go func() {
-			atomic.AddInt64(&counter, 1)
-			//this allows to read and write tot he counter in memory without race conditions
-			fmt.Println("counter is safe no race condition:\t", atomic.LoadInt64(&counter))
-			runtime.Gosched()
-			wait.Done()
+			fmt.Println("Hello From Thing 1")
+			waitingGame.Done()
 		}()
-		fmt.Println("how many go Routines running?:\t", runtime.NumGoroutine())
-		fmt.Println("count:\t", counter)
+
+		go func() {
+			fmt.Println("Hello From thing 2")
+			waitingGame.Done()
+		}()
+
+		fmt.Println("Mid CPU", runtime.NumCPU())
+		fmt.Println("Mid Routines", runtime.NumGoroutine())
+
+		waitingGame.Wait()
+		fmt.Println("exiting the game")
+
+	fmt.Println("End CPU", runtime.NumCPU())
+	fmt.Println("End Routines", runtime.NumGoroutine())
 
 	}
 	//create the race condition below.
-	wait.Wait()
-	fmt.Println("how many go Routines running?:\t", runtime.NumGoroutine())
-	fmt.Println("count:\t", counter)
 
-}
 
+ 
 // ----------------------------------------------------------------PAK CODING 1:1
 // package main
 
