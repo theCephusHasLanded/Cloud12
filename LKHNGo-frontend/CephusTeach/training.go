@@ -1,32 +1,69 @@
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
 package main
 
 import (
 	"fmt"
+	"runtime"
+	"sync"
 )
 
-type person struct {
-	first string
-}
-
-type human interface {
-	speak()
-}
-
-func (p *person) speak() {
-	fmt.Println("Hello")
-}
-
-func sayHello(h human) {
-	h.speak()
-}
-
 func main() {
-	p1 := person{
-		first: "Lamer",
+	var wg sync.WaitGroup
+
+	incrementor := 0
+	gs := 100
+	wg.Add(gs)
+
+	for i := 0; i < gs; i++ {
+		go func() {
+			//reassign the counter to the current counter/incrementor
+			v := incrementor
+			runtime.Gosched()
+			v++
+			incrementor = v
+			fmt.Println(incrementor)
+
+			wg.Done()
+
+		}()
+
 	}
-	sayHello(&p1)
-	p1.speak()
+	wg.Wait()
+	fmt.Println("end value:",incrementor)
+
 }
+
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// type person struct {
+// 	first string
+// }
+
+// type human interface {
+// 	speak()
+// }
+
+// func (p *person) speak() {
+// 	fmt.Println("Hello")
+// }
+
+// func sayHello(h human) {
+// 	h.speak()
+// }
+
+// func main() {
+// 	p1 := person{
+// 		first: "Lamer",
+// 	}
+// 	sayHello(&p1)
+// 	p1.speak()
+// }
 
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
 // package main
