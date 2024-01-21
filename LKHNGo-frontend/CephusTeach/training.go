@@ -1,40 +1,69 @@
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
+
 package main
 
 import (
 	"fmt"
-	"runtime"
 	"sync"
+	"sync/atomic"
 )
 
 func main() {
 	var wg sync.WaitGroup
-
-	incrementor := 0
+	var incrementor int64
 	gs := 100
 	wg.Add(gs)
-	var mu sync.Mutex
 
 	for i := 0; i < gs; i++ {
 		go func() {
-			mu.Lock()
-			//reassign the counter to the current counter/incrementor
-			v := incrementor
-			runtime.Gosched()
-			v++
-			incrementor = v
+			atomic.AddInt64(&incrementor, 1)
 			fmt.Println(incrementor)
-			mu.Unlock()
-
 			wg.Done()
-
 		}()
 
 	}
 	wg.Wait()
-	fmt.Println("end value:",incrementor)
+	fmt.Println("end value:", incrementor)
 
 }
+
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+// package main
+
+// import (
+// 	"fmt"
+// 	"runtime"
+// 	"sync"
+// )
+
+// func main() {
+// 	var wg sync.WaitGroup
+
+// 	incrementor := 0
+// 	gs := 100
+// 	wg.Add(gs)
+// 	var mu sync.Mutex
+
+// 	for i := 0; i < gs; i++ {
+// 		go func() {
+// 			mu.Lock()
+// 			//reassign the counter to the current counter/incrementor
+// 			v := incrementor
+// 			runtime.Gosched()
+// 			v++
+// 			incrementor = v
+// 			fmt.Println(incrementor)
+// 			mu.Unlock()
+
+// 			wg.Done()
+
+// 		}()
+
+// 	}
+// 	wg.Wait()
+// 	fmt.Println("end value:",incrementor)
+
+// }
 
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
 
