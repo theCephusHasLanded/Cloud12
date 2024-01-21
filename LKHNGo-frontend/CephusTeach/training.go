@@ -4,38 +4,29 @@ import (
 	"fmt"
 	"runtime"
 	"sync"
-	"time"
+	"sync/atomic"
 )
 
 func main() {
 	fmt.Println("how many CPU's running?:\t", runtime.NumCPU())
 	fmt.Println("how many go Routines running?:\t", runtime.NumGoroutine())
 
-	counter := 0
+	var counter int64
 
 	const gz = 100
 	var wait sync.WaitGroup
 	wait.Add(gz)
 
-	var mu sync.Mutex
-
 	for i := 0; i < gz; i++ {
 		go func() {
-			mu.Lock()
-			v := counter
-			//if you want to wait or have a timeout -- import time and give it some rest
-			time.Sleep(time.Second)
+			atomic.AddInt64(&counter, 1)
+			//this allows to read and write tot he counter in memory without race conditions
+			fmt.Println("counter is safe no race condition:\t", atomic.LoadInt64(&counter))
 			runtime.Gosched()
-			v++
-			counter = v
-			//unlock your mutex
-			mu.Unlock()
-			//now set your wait group to done
 			wait.Done()
 		}()
 		fmt.Println("how many go Routines running?:\t", runtime.NumGoroutine())
 		fmt.Println("count:\t", counter)
-
 
 	}
 	//create the race condition below.
