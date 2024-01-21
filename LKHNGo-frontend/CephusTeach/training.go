@@ -13,15 +13,18 @@ func main() {
 	incrementor := 0
 	gs := 100
 	wg.Add(gs)
+	var mu sync.Mutex
 
 	for i := 0; i < gs; i++ {
 		go func() {
+			mu.Lock()
 			//reassign the counter to the current counter/incrementor
 			v := incrementor
 			runtime.Gosched()
 			v++
 			incrementor = v
 			fmt.Println(incrementor)
+			mu.Unlock()
 
 			wg.Done()
 
