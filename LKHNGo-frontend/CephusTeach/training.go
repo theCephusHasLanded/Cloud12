@@ -1,4 +1,35 @@
+
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
+
+package main
+
+import(
+	"fmt"
+) 
+
+func main() {
+	ch := make(chan int)
+
+	//send
+	go func(){
+		for i := 0; i < 77; i++ {
+			ch <- i
+		}
+		close(ch)
+	}()
+
+	//recieve 
+	for value := range ch {
+		fmt.Println(value)
+	} 
+	fmt.Println("We leaving!")
+	fmt.Printf("ch\t%T\n", ch)
+
+
+}
+
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+/*
 package main
 
 import "fmt"
