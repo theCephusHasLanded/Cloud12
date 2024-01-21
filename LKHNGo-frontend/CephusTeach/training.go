@@ -2,42 +2,70 @@ package main
 
 import (
 	"fmt"
-	"runtime"
-	"sync"
 )
 
+type person struct {
+	first string
+}
+
+type human interface {
+	speak()
+}
+
+func (p *person) speak() {
+	fmt.Println("Hello")
+}
+
+func sayHello(h human) {
+	h.speak()
+}
+
 func main() {
-
-	fmt.Println("Begin CPU", runtime.NumCPU())
-	fmt.Println("Begin Routines", runtime.NumGoroutine())
-
-	var waitingGame sync.WaitGroup
-	waitingGame.Add(2)
-
-		go func() {
-			fmt.Println("Hello From Thing 1")
-			waitingGame.Done()
-		}()
-
-		go func() {
-			fmt.Println("Hello From thing 2")
-			waitingGame.Done()
-		}()
-
-		fmt.Println("Mid CPU", runtime.NumCPU())
-		fmt.Println("Mid Routines", runtime.NumGoroutine())
-
-		waitingGame.Wait()
-		fmt.Println("exiting the game")
-
-	fmt.Println("End CPU", runtime.NumCPU())
-	fmt.Println("End Routines", runtime.NumGoroutine())
-
+	p1 := person{
+		first: "Lamer",
 	}
-	//create the race condition below.
+	sayHello(&p1)
+	p1.speak()
+}
 
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+// package main
 
- 
+// import (
+// 	"fmt"
+// 	"runtime"
+// 	"sync"
+// )
+
+// func main() {
+
+// 	fmt.Println("Begin CPU", runtime.NumCPU())
+// 	fmt.Println("Begin Routines", runtime.NumGoroutine())
+
+// 	var waitingGame sync.WaitGroup
+// 	waitingGame.Add(2)
+
+// 		go func() {
+// 			fmt.Println("Hello From Thing 1")
+// 			waitingGame.Done()
+// 		}()
+
+// 		go func() {
+// 			fmt.Println("Hello From thing 2")
+// 			waitingGame.Done()
+// 		}()
+
+// 		fmt.Println("Mid CPU", runtime.NumCPU())
+// 		fmt.Println("Mid Routines", runtime.NumGoroutine())
+
+// 		waitingGame.Wait()
+// 		fmt.Println("exiting the game")
+
+// 	fmt.Println("End CPU", runtime.NumCPU())
+// 	fmt.Println("End Routines", runtime.NumGoroutine())
+
+// 	}
+
 // ----------------------------------------------------------------PAK CODING 1:1
 // package main
 
