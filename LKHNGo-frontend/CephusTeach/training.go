@@ -1,32 +1,78 @@
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+package main
+
+import (
+	"fmt"
+)
+
+func main(){
+	eve := make(chan int)
+	odd := make(chan int)
+	quit := make(chan int)
+
+	//send
+	go send(eve, odd, quit)
+
+	//recieve
+	recieve(eve, odd, quit)
+}
+func recieve(e,o,q <-chan int){
+	for {
+		select {
+		case v := <- e:
+			fmt.Println("recieved from the even chan:", v)
+		case v := <- o:
+			fmt.Println("recieved from the odd chan:", v)
+		case v := <- q:
+			fmt.Println("recieved from the quit chan:", v)
+		// close(q)
+		return
+	}
+	}
+}
+
+func send(e,o,q chan <- int){
+	for i := 0; i <100; i++ {
+		if i % 2 == 0 {
+			e <- i
+		} else {
+			o <- i
+		}
+	}
+	close(e)
+	close(o)
+	q <- 0
+}
+
 
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
 
-package main
+// package main
 
-import(
-	"fmt"
-) 
+// import(
+// 	"fmt"
+// ) 
 
-func main() {
-	ch := make(chan int)
+// func main() {
+// 	ch := make(chan int)
 
-	//send
-	go func(){
-		for i := 0; i < 77; i++ {
-			ch <- i
-		}
-		close(ch)
-	}()
+// 	//send
+// 	go func(){
+// 		for i := 0; i < 77; i++ {
+// 			ch <- i
+// 		}
+// 		close(ch)
+// 	}()
 
-	//recieve 
-	for value := range ch {
-		fmt.Println(value)
-	} 
-	fmt.Println("We leaving!")
-	fmt.Printf("ch\t%T\n", ch)
+// 	//recieve 
+// 	for value := range ch {
+// 		fmt.Println(value)
+// 	} 
+// 	fmt.Println("We leaving!")
+// 	fmt.Printf("ch\t%T\n", ch)
 
 
-}
+// }
 
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
 /*
