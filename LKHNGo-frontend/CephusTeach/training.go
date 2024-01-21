@@ -13,22 +13,29 @@ func main() {
 
 	counter := 0
 
-	const gz = 10
+	const gz = 100
 	var wait sync.WaitGroup
 	wait.Add(gz)
 
+	var mu sync.Mutex
+
 	for i := 0; i < gz; i++ {
 		go func() {
+			mu.Lock()
 			v := counter
 			//if you want to wait or have a timeout -- import time and give it some rest
 			time.Sleep(time.Second)
 			runtime.Gosched()
 			v++
 			counter = v
+			//unlock your mutex
+			mu.Unlock()
 			//now set your wait group to done
 			wait.Done()
 		}()
 		fmt.Println("how many go Routines running?:\t", runtime.NumGoroutine())
+		fmt.Println("count:\t", counter)
+
 
 	}
 	//create the race condition below.
