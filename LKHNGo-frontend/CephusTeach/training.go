@@ -1,27 +1,90 @@
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
 package main
 
+import "fmt"
+
+func main() {
+
+	c := make(chan int)
+
+	//send
+	go dragon(c)
+
+	//recieve
+	horse(c)
+
+	fmt.Println("We about to end it here...")
+}
+
+//send
+func dragon(c chan<- int){
+	c <- 42
+}
+
+//recieve
+func horse(c <-chan int){
+fmt.Println(<- c)
+}
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+
+/*
+package main
+
 import (
 	"fmt"
 )
 
 func main() {
-	//lets make a channrl
-	//introducing "1" as a make param to make a buffer channel
-	ch := make(chan int, 2)
+	//lets make a directional channel -- one you can send only -- read from left to right
+	ch := make(chan int) //recieve
+	cr := make(<-chan int) //recieve
+	cs := make(chan<- int) //send
 
+	fmt.Println("*****************")
+	fmt.Printf("ch\t%T\n", ch)
+	fmt.Printf("cr\t%T\n", cr)
+	fmt.Printf("cs\t%T\n", cs)
+
+	//we can take a bi-driectional channel and assign it to a recieve  -- going from general to specific works but not so much the other way.
 
 	//when the shannel is blocked which is clear in the "fatal error: all goroutines are asleep - deadlock!" we will have to pass the value succesffully. we must use the go func() function -- the flow continues.
-	go func() {
 		ch <- 42
 		ch <- 43
 
 
-	}()
 
-	fmt.Println((<-ch))
+		// fmt.Println((<-ch))
+		// fmt.Println((<-ch))
+		// fmt.Println("*****************")
+}		// fmt.Printf("%T\n", ch)
+*/
 
-}
+
+
+// ----------------------------------------------------------------UDEMY CODING GoesToEleven
+// package main
+
+// import (
+// 	"fmt"
+// )
+
+// func main() {
+// 	//lets make a channrl
+// 	//introducing "1" as a make param to make a buffer channel
+// 	ch := make(chan int, 2)
+
+
+// 	//when the shannel is blocked which is clear in the "fatal error: all goroutines are asleep - deadlock!" we will have to pass the value succesffully. we must use the go func() function -- the flow continues.
+// 	go func() {
+// 		ch <- 42
+// 		ch <- 43
+
+
+// 	}()
+
+// 	fmt.Println((<-ch))
+
+// }
 // ----------------------------------------------------------------UDEMY CODING GoesToEleven
 // package main
 
